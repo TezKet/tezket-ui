@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "tezket-ui",
+    "slug": "tezket-ui",
+    "version": "2.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
