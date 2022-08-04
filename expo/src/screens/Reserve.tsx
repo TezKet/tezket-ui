@@ -117,7 +117,7 @@ export function Reserve({ navigation }: { navigation: BottomTabNavigationProp<an
                 <HStack flexShrink={1} space={2} alignItems="center">
                   <Alert.Icon />
                   <Text fontSize="md" fontWeight="medium" color="coolGray.800">
-                    We are going live in July!
+                    We are going live in Q3 2022!
                   </Text>
                 </HStack>
                 <IconButton variant="unstyled" _focus={{

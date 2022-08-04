@@ -26,6 +26,9 @@ import { WalletContext } from '../providers/WalletContext';
 import BuyTicketModalContent from '../modals/BuyTicketModalContent';
 import MintModalContent from '../modals/MintModalContent';
 
+import getTicketInfos from '../../firebase';
+
+
 export type TicketInfo = {
   ticketype: string;  
   name: string;
@@ -43,16 +46,16 @@ export const TicketType = [
 ];
 
 export const TicketList: TicketInfo[] = [
-  {
-    ticketype: TicketType[0],
-    name: "The Garden City",
-    urlimg: require('./card/Bangalore_citycover_20190613234056.jpg'),
-    tag: "1 DAY PASS",
-    keyword: "The Silicon Valley of India.",
-    description: "Bengaluru (also called Bangalore) is the center of India's high-tech\nindustry. The city is also known for its parks and nightlife.",
-    timepref: "Vaild in 27/06/2022",
-    ticketprice: "2.00" // THB
-  },
+  // {
+  //   ticketype: TicketType[0],
+  //   name: "The Garden City",
+  //   urlimg: require('./card/Bangalore_citycover_20190613234056.jpg'),
+  //   tag: "1 DAY PASS",
+  //   keyword: "The Silicon Valley of India.",
+  //   description: "Bengaluru (also called Bangalore) is the center of India's high-tech\nindustry. The city is also known for its parks and nightlife.",
+  //   timepref: "Vaild in 27/06/2022",
+  //   ticketprice: "2.00" // THB
+  // },
   // {
   //   ticketype: TicketType[1],
   //   name: "The Garden City",
@@ -78,6 +81,8 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
   const [ticketType, setTicketType] = useState("");
   const [ticketPrice, setTicketPrice] = useState("");
 
+  const [ticketList, setTicketList] = useState<TicketInfo[]>([]);
+
   const toggleBuyTicketModal = () => {
     setBuyTicketModalVisible(!isBuyTicketModalVisible);
     toggleMintModal();
@@ -93,6 +98,31 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
     setTicketPrice(ticketprice);
     setBuyTicketModalVisible(true);
   };
+
+  const fetchTicketInfos=async()=>{
+    const querySnapshot = await getTicketInfos();
+    querySnapshot.forEach((doc) => {
+    
+
+      const ticketItem: TicketInfo = {
+        ticketype: doc.data().ticketype,
+        name: doc.data().name,
+        urlimg: doc.data().urlimg,
+        tag: doc.data().tag,
+        keyword: doc.data().keyword,
+        description: doc.data().description,
+        timepref: "" + doc.data().timepref,
+        ticketprice: doc.data().ticketprice,
+      };
+
+      setTicketList([...ticketList,ticketItem])
+    });
+
+  }
+
+  useEffect(() => {
+    fetchTicketInfos();
+  }, [])
 
   return (
     <Box  pt={8}>
@@ -116,7 +146,7 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
 
         <Divider opacity={colorMode == 'dark' ? '0.4' : '1'} />
 
-        {TicketList.map((ticket) => (
+        {ticketList.map((ticket) => (
         
         <Box alignItems="center" mx={3} my={3}> 
           <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="1" _dark={{

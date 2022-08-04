@@ -21,8 +21,9 @@ import axios from 'axios';
 
 import { WalletContext } from '../providers/WalletContext';
 
-export const ApiMinter = '<>';
-// export const ApiMinter = 'http://192.168.1.114:8082';
+import { TEZKET_API_MINTER } from "@env"
+
+export const ApiMinter = TEZKET_API_MINTER;
 
 type Props = {
   onPress: () => any;

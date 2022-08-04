@@ -18,10 +18,12 @@ import { MaterialCommunityIcons, Entypo, Ionicons } from '@expo/vector-icons';
 
 import { payments } from '@square/web-sdk';
 import type { Payments, GooglePay } from '@square/web-sdk';
+import { TEZKET_PAYMENT_URL, 
+  TEZKET_SQ_APPLICATION_ID, TEZKET_SQ_LOCATION_ID } from "@env"
 
-const paymentUrl = '<>'
-const appId = '';
-const locationId = '';
+const paymentUrl = TEZKET_PAYMENT_URL;
+const appId = TEZKET_SQ_APPLICATION_ID;
+const locationId = TEZKET_SQ_LOCATION_ID;
 
 type Props = {
   onPress: () => any;
@@ -122,6 +124,9 @@ const BuyTicketModalContent: React.FC<Props> = (props) => {
     // props.setResultStatus(true);
     
     useEffect(() => {
+
+        console.log(TEZKET_PAYMENT_URL)
+        console.log(paymentUrl)
     
         const fetchSqPayment = async () => {
             
