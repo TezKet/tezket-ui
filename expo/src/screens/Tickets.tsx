@@ -26,7 +26,7 @@ import { WalletContext } from '../providers/WalletContext';
 import BuyTicketModalContent from '../modals/BuyTicketModalContent';
 import MintModalContent from '../modals/MintModalContent';
 
-import { getTicketInfos, logTag } from '../../firebase';
+import { getTicketInfos, logTag } from '../services/firebase';
 
 
 export type TicketInfo = {

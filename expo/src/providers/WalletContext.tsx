@@ -13,7 +13,7 @@ import { TicketType, TicketList, TicketInfo } from '../screens/Tickets';
 import { TEZOS_RPC_URL, 
     TEZOS_NFT_CONTRACT } from "@env"
 
-import { logTag } from '../../firebase';
+import { logTag } from '../services/firebase';
 
 const rpcUrl = TEZOS_RPC_URL;
 const networkId = NetworkType.ITHACANET;
