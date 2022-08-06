@@ -68,3 +68,4 @@ node_modules/
 # FIXED
 firebase.json
 .firebaserc
+expo/firebase.config.js

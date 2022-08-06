@@ -10,13 +10,18 @@ import { char2Bytes, bytes2Char } from "@taquito/utils";
 
 import { TicketType, TicketList, TicketInfo } from '../screens/Tickets';
 
-const rpcUrl = 'https://ithacanet.ecadinfra.com';
+import { TEZOS_RPC_URL, 
+    TEZOS_NFT_CONTRACT } from "@env"
+
+import { logTag } from '../../firebase';
+
+const rpcUrl = TEZOS_RPC_URL;
 const networkId = NetworkType.ITHACANET;
 const networkName = "Ithanet Testnet"
 // // TEMPLE WALLET WORK WITH ITHANET
 
 const Tezos = new TezosToolkit(rpcUrl);
-const nftContract = 'KT1Q88GESbqLK6mTJu7NL42DiFkGAmiBfhMb';
+const nftContract = TEZOS_NFT_CONTRACT;
 
 // const ipfsUrl = 'https://cloudflare-ipfs.com'
 const ipfsUrl = 'https://gateway.pinata.cloud'
@@ -161,6 +166,7 @@ const WalletProvider: FC = ({ children }) => {
             const addr = respReqPermit.address;
             setUserAddress(addr);
             setIsWalletLinked(true);
+            logTag('event_wallet_linked');
             setIsAdmin(addr == 'tz1iRsmK9mKi6rjGYGyRQduFTBjkTM5tzbhs');
             await getTicketNfts(addr);
     

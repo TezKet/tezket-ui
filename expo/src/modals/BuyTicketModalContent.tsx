@@ -27,6 +27,7 @@ const locationId = TEZKET_SQ_LOCATION_ID;
 
 type Props = {
   onPress: () => any;
+  setCallPaymentStatus: (Boolean) => any;
   setResultStatus: (Boolean) => any;
   resultStatus: Boolean;
   ticketPrice: string;
@@ -124,9 +125,6 @@ const BuyTicketModalContent: React.FC<Props> = (props) => {
     // props.setResultStatus(true);
     
     useEffect(() => {
-
-        console.log(TEZKET_PAYMENT_URL)
-        console.log(paymentUrl)
     
         const fetchSqPayment = async () => {
             
@@ -161,9 +159,10 @@ const BuyTicketModalContent: React.FC<Props> = (props) => {
                 await googlePay.attach('#google-pay-button');
                 
                 const googlePayButtonTarget = document.getElementById('google-pay-button');
-                googlePayButtonTarget.onclick = async () => {
-                    await handlePaymentMethodSubmission(googlePay, props);
-                }
+                // googlePayButtonTarget.onclick = async () => {
+                    // props.setCallPaymentStatus(true);
+                    // await handlePaymentMethodSubmission(googlePay, props);
+                // }
             }
 
         }

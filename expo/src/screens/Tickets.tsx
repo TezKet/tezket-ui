@@ -26,7 +26,7 @@ import { WalletContext } from '../providers/WalletContext';
 import BuyTicketModalContent from '../modals/BuyTicketModalContent';
 import MintModalContent from '../modals/MintModalContent';
 
-import getTicketInfos from '../../firebase';
+import { getTicketInfos, logTag } from '../../firebase';
 
 
 export type TicketInfo = {
@@ -75,6 +75,7 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
   const [isBuyTicketModalVisible, setBuyTicketModalVisible] = useState(false);
   const [isMintModalVisible, setMintModalVisible] = useState(false);
 
+  const [callPayStatus, setCallPayStatus] = useState(false);
   const [payStatus, setPayStatus] = useState(false);
   const [mintStatus, setMintStatus] = useState(false);
 
@@ -85,7 +86,9 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
 
   const toggleBuyTicketModal = () => {
     setBuyTicketModalVisible(!isBuyTicketModalVisible);
-    toggleMintModal();
+    // if(callPayStatus) {
+      // toggleMintModal();
+    // }
   };
 
   const toggleMintModal = () => {
@@ -133,7 +136,7 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
 
         <Modal testID={'modal'} isVisible={isBuyTicketModalVisible}>
           <BuyTicketModalContent onPress={toggleBuyTicketModal} 
-              resultStatus={payStatus} setResultStatus={setPayStatus}
+              resultStatus={payStatus} setCallPaymentStatus={setCallPayStatus} setResultStatus={setPayStatus}
               ticketPrice={ticketPrice}/>
         </Modal>
         
@@ -198,9 +201,12 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
                     {ticket.timepref}
                   </Text>
                 </HStack>
-              <Button ml="auto"
+              {/* <Button ml="auto"
                 onPress={()=>showBuyTicket(ticket.ticketype, ticket.ticketprice)}
-                >Buy</Button>
+                >Buy</Button> */}
+              <Button ml="auto" disabled={true}
+                // onPress={()=>showBuyTicket(ticket.ticketype, ticket.ticketprice)}
+                >Soon</Button>
               </HStack>
             </Stack>
           </Box>
