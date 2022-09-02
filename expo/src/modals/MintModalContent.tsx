@@ -30,6 +30,7 @@ type Props = {
   payStatus: Boolean;
   mintStatus: Boolean;
   setMintStatus: (Boolean) => any;
+  contractAddress: string;
   userAddress: string;
   ticketType: string;
   txID: string;
@@ -52,12 +53,20 @@ const MintModalContent: React.FC<Props> = (props) => {
           try {
 
             const req = { 
+              contractAddress: props.contractAddress,
               minterAddress: props.userAddress,
-              ticketType: props.ticketType,
+              ticketTarget: props.ticketType,
               payRef: props.txID,
               signRef: "<>"
             };
         
+          //   {
+          //     "contractAddress": "KT1Q88GESbqLK6mTJu7NL42DiFkGAmiBfhMb",
+          //     "minterAddress": "tz1i4W46rLC4qNHn2jcZmgUo6FQ1AEomhzjh",
+          //     "ticketTarget": "241944074126507120/R1",
+          //     "payRef": ""
+          // }
+
             console.log(req);
 
             const resp = await axios.post(
@@ -65,7 +74,7 @@ const MintModalContent: React.FC<Props> = (props) => {
                   req
                 );
                 
-            if(resp.data.status) {
+            if(resp.data.code.status) {
               props.setMintStatus(true);
               setIsMintSuccess(true);
               getTicketNfts(props.userAddress);

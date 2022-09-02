@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
+import axios from 'axios';
+
 import {
   Box,
   Divider,
@@ -26,7 +28,7 @@ import { WalletContext } from '../providers/WalletContext';
 import BuyTicketModalContent from '../modals/BuyTicketModalContent';
 import MintModalContent from '../modals/MintModalContent';
 
-import { getTicketInfos, logTag } from '../services/firebase';
+// import { getTicketInfos, logTag } from '../services/firebase';
 
 
 export type TicketInfo = {
@@ -38,6 +40,7 @@ export type TicketInfo = {
   description: string;
   timepref: string;
   ticketprice: string;
+  contract: string;
 }
 
 export const TicketType = [
@@ -67,17 +70,22 @@ export const TicketList: TicketInfo[] = [
   // },
 ];
 
+
+const storeMeta = 'https://tezket-emu-api-pplpa5ifea-wl.a.run.app';
+
 export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<any> }) {
 
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const { isWalletLinked, userAddress } =useContext(WalletContext);
+  const { isWalletLinked, userAddress, linkWallet } =useContext(WalletContext);
   const [isBuyTicketModalVisible, setBuyTicketModalVisible] = useState(false);
   const [isMintModalVisible, setMintModalVisible] = useState(false);
 
   const [callPayStatus, setCallPayStatus] = useState(false);
   const [payStatus, setPayStatus] = useState(false);
   const [mintStatus, setMintStatus] = useState(false);
+
+  const [contractAddress, setContractAddress] = useState("");
 
   const [ticketType, setTicketType] = useState("");
   const [ticketPrice, setTicketPrice] = useState("");
@@ -86,9 +94,9 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
 
   const toggleBuyTicketModal = () => {
     setBuyTicketModalVisible(!isBuyTicketModalVisible);
-    // if(callPayStatus) {
-      // toggleMintModal();
-    // }
+    // // if(callPayStatus) {
+    //   toggleMintModal();
+    // // }
   };
 
   const toggleMintModal = () => {
@@ -96,30 +104,60 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
     setBuyTicketModalVisible(false);
   };
 
-  const showBuyTicket = async (tickettype,ticketprice) => {
+  const showBuyTicket = async (tickettype,ticketprice,contract) => {
     setTicketType(tickettype);
     setTicketPrice(ticketprice);
     setBuyTicketModalVisible(true);
+    setContractAddress(contract);
   };
 
   const fetchTicketInfos=async()=>{
-    const querySnapshot = await getTicketInfos();
-    querySnapshot.forEach((doc) => {
-    
 
+    var eventInfo = await axios.get(`${storeMeta}/events`);
+
+    // console.log(eventInfo);
+
+    for (let v in eventInfo.data) {
+      // code to be executed
+      console.log(eventInfo.data[v]);
+      
       const ticketItem: TicketInfo = {
-        ticketype: doc.data().ticketype,
-        name: doc.data().name,
-        urlimg: doc.data().urlimg,
-        tag: doc.data().tag,
-        keyword: doc.data().keyword,
-        description: doc.data().description,
-        timepref: "" + doc.data().timepref,
-        ticketprice: doc.data().ticketprice,
+        ticketype: v +"/" + eventInfo.data[v].tickets[0].ref,
+        name: eventInfo.data[v].name,
+        urlimg: "https://assets-global.website-files.com/60ca686c96b42034829a80d3/60de41c9d82d5b6f6922bb9d_network-poster-00001.jpg",
+        tag: eventInfo.data[v].tag[0],
+        keyword: eventInfo.data[v].keyword[0],
+        description: eventInfo.data[v].description,
+        timepref: eventInfo.data[v].timepref[0].type,
+        ticketprice: "" + eventInfo.data[v].tickets[0].price + ".00",
+        contract: eventInfo.data[v].contract
       };
 
       setTicketList([...ticketList,ticketItem])
-    });
+
+    }
+
+    // await eventInfo.data.forEach((value) => {
+    //   console.log(value);
+    // });
+
+    // const querySnapshot = await getTicketInfos();
+    // querySnapshot.forEach((doc) => {
+    
+
+    //   const ticketItem: TicketInfo = {
+    //     ticketype: doc.data().ticketype,
+    //     name: doc.data().name,
+    //     urlimg: doc.data().urlimg,
+    //     tag: doc.data().tag,
+    //     keyword: doc.data().keyword,
+    //     description: doc.data().description,
+    //     timepref: "" + doc.data().timepref,
+    //     ticketprice: doc.data().ticketprice,
+    //   };
+
+    //   setTicketList([...ticketList,ticketItem])
+    // });
 
   }
 
@@ -144,6 +182,7 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
           <MintModalContent onPress={toggleMintModal} 
               payStatus={payStatus} 
               mintStatus={mintStatus} setMintStatus={setMintStatus}
+              contractAddress={contractAddress}
               userAddress={userAddress} ticketType={ticketType} txID={''}/>
         </Modal>
 
@@ -201,13 +240,22 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
                     {ticket.timepref}
                   </Text>
                 </HStack>
+                {isWalletLinked ?
+                  <Button ml="auto"
+                  onPress={()=>showBuyTicket(ticket.ticketype, ticket.ticketprice, ticket.contract)}
+                  >Buy</Button>
+                  :
+                  <Button ml="auto"  colorScheme="secondary"
+                  onPress={linkWallet}
+                  >Link Wallet</Button>
+                }
               {/* <Button ml="auto"
-                onPress={()=>showBuyTicket(ticket.ticketype, ticket.ticketprice)}
-                >Buy</Button> */}
-              <Button ml="auto" disabled={true}
+                 onPress={()=>showBuyTicket(ticket.ticketype, ticket.ticketprice, ticket.contract)}
+                 >Buy</Button> */}
+              {/* <Button ml="auto" disabled={true}
                 // onPress={()=>showBuyTicket(ticket.ticketype, ticket.ticketprice)}
-                >Soon</Button>
-              </HStack>
+                  >Soon</Button> */}
+              </HStack> 
             </Stack>
           </Box>
         </Box>

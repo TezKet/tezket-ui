@@ -28,6 +28,6 @@ export const BaseTheme = extendTheme({
 
 	config: {
 		// Changing initialColorMode to 'dark'
-		initialColorMode: 'dark',
+		initialColorMode: 'light',
 	},
 });

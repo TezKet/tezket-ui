@@ -115,7 +115,9 @@ async function handlePaymentMethodSubmission(paymentMethod, props) {
     } catch (e) {
     //   cardButton.disabled = false;
       displayPaymentResults('FAILURE', props);
-      console.error("handlePaymentMethodSubmission >> " + e.message);
+
+      // displayPaymentResults('SUCCESS', props);
+      // console.error("handlePaymentMethodSubmission >> " + e.message);
     }
 }
 
@@ -160,8 +162,8 @@ const BuyTicketModalContent: React.FC<Props> = (props) => {
                 
                 const googlePayButtonTarget = document.getElementById('google-pay-button');
                 // googlePayButtonTarget.onclick = async () => {
-                    // props.setCallPaymentStatus(true);
-                    // await handlePaymentMethodSubmission(googlePay, props);
+                //     props.setCallPaymentStatus(true);
+                //     await handlePaymentMethodSubmission(googlePay, props);
                 // }
             }
 

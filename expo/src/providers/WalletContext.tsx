@@ -120,6 +120,8 @@ const WalletProvider: FC = ({ children }) => {
                   let metadataNft = await fetch(`${ipfsUrl}/ipfs/${ipfsHash}`)
                     .then((response) => response.json());
 
+                    console.log(metadataNft);
+                    
                   // TICKETTYPE
                   const displayUri = metadataNft.displayUri;
                   const tokenSymbol = metadataNft.symbol;
