@@ -47,7 +47,8 @@ const TicketModalContent: React.FC<Props> =  (props) => {
       console.log("opened");
 
       const reqTd = {
-        userAddress: props.userAddress
+        userAddress: props.userAddress,
+        mode: "OPEN"
       };
       ws.send(JSON.stringify(reqTd));
 
@@ -67,11 +68,21 @@ const TicketModalContent: React.FC<Props> =  (props) => {
 
           await signPayload("TEST");
 
-          // Sign ...
-          let RespApiUse = await fetch(`${ApiMinter}/use/${props.userAddress}/1234/TEST/${cmd[1]}`)
-            .then((response) => response.json());
+          // // Sign ...
+          // let RespApiUse = await fetch(`${ApiMinter}/use/${props.userAddress}/1234/TEST/${cmd[1]}`)
+          //   .then((response) => response.json());
 
-          console.log(RespApiUse);
+          // console.log(RespApiUse);
+
+          const reqTd = {
+            userAddress: props.userAddress,
+            mode: "USE",
+            signAddress: props.userAddress,
+            gateAddress: cmd[1],
+            ticketId: "",
+            signature: ""
+          };
+          ws.send(JSON.stringify(reqTd));
 
           props.setSignState("OK");
 

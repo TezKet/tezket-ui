@@ -46,26 +46,30 @@ const ScanQrModalContent: React.FC<Props> = (props) => {
     if (data) {
       // console.log(data);
 
-      const meta = data.split(";", 9); 
+      const meta = data.split(";", 8); 
       console.log(meta);
 
-      setData(meta[6]);
+      // setData(meta[6]);
+      setData(meta[4]);
 
       // Switch Data Model
       // >> Sub Address > Request to Sign
 
       // 1234;tz1ioHBakcGBzT9PFxaiPCoxDJh1Ad7rWkms-4ExdpPd;-;startdate;enddate;746090;tz1ioHBakcGBzT9PFxaiPCoxDJh1Ad7rWkms;;<>;
+      // 241944074126507120/R1;tz1ioHBakcGBzT9PFxaiPCoxDJh1Ad7rWkms-aJGqos1;;1135020;tz1ioHBakcGBzT9PFxaiPCoxDJh1Ad7rWkms;KT1Q88GESbqLK6mTJu7NL42DiFkGAmiBfhMb;;06/09/2022 04:29 AM
 
       // Modal Display Infor.
 
-      const minterAddress = meta[6];
+      // const minterAddress = meta[6];
+      const minterAddress = meta[4];
      
       const ws = new WebsocketBuilder(SignSocketUrl)
       .onOpen(async (i, ev) => { 
         console.log("opened");
     
         const reqTd = {
-          userAddress: props.userAddress
+          userAddress: props.userAddress,
+          mode: "OPEN"
         };
         ws.send(JSON.stringify(reqTd));
 
@@ -73,11 +77,19 @@ const ScanQrModalContent: React.FC<Props> = (props) => {
         props.setMetaState("");
         props.onSigning();
 
-        let RespApiUse = await fetch(`${ApiMinter}/sign/${minterAddress}/${props.userAddress}`)
-          .then((response) => response.json());
+        // let RespApiUse = await fetch(`${ApiMinter}/sign/${minterAddress}/${props.userAddress}`)
+        //   .then((response) => response.json());
     
-        console.log(RespApiUse);
-    
+        // console.log(RespApiUse);
+
+        const signTd = {
+          userAddress: props.userAddress,
+          mode: "SIGN",
+          signAddress: minterAddress,
+          gateAddress: props.userAddress
+        };
+        ws.send(JSON.stringify(signTd));
+
       })
       .onClose((i, ev) => { console.log("closed") })
       .onError((i, ev) => { console.log("error") })

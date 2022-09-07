@@ -161,10 +161,14 @@ const BuyTicketModalContent: React.FC<Props> = (props) => {
                 await googlePay.attach('#google-pay-button');
                 
                 const googlePayButtonTarget = document.getElementById('google-pay-button');
-                // googlePayButtonTarget.onclick = async () => {
+                googlePayButtonTarget.onclick = async () => {
+
+        props.setCallPaymentStatus(true);
+        displayPaymentResults('SUCCESS', props);
+
                 //     props.setCallPaymentStatus(true);
                 //     await handlePaymentMethodSubmission(googlePay, props);
-                // }
+                }
             }
 
         }
@@ -198,6 +202,10 @@ const BuyTicketModalContent: React.FC<Props> = (props) => {
       {/* <div id="card-container"></div> */}
       {/* <button id="card-button" type="button">Pay THB1.00</button> */}
       {/* <Button id="card-button">Pay THB1.00</Button> */}
+      {/* <Button onPress={()=>{ 
+        props.setCallPaymentStatus(true);
+        displayPaymentResults('SUCCESS', props);
+      }}>Free Mint</Button> */}
     </form>
     {/* <div id="payment-status-container"></div> */}
     </HStack>

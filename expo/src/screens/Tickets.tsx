@@ -1,8 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
-import axios from 'axios';
-
 import {
   Box,
   Divider,
@@ -71,13 +69,12 @@ export const TicketList: TicketInfo[] = [
 ];
 
 
-const storeMeta = 'https://tezket-emu-api-pplpa5ifea-wl.a.run.app';
-
 export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<any> }) {
 
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const { isWalletLinked, userAddress, linkWallet } =useContext(WalletContext);
+  const { isWalletLinked, userAddress, linkWallet, 
+    ticketList, setTicketList, fetchTicketInfos } =useContext(WalletContext);
   const [isBuyTicketModalVisible, setBuyTicketModalVisible] = useState(false);
   const [isMintModalVisible, setMintModalVisible] = useState(false);
 
@@ -90,13 +87,13 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
   const [ticketType, setTicketType] = useState("");
   const [ticketPrice, setTicketPrice] = useState("");
 
-  const [ticketList, setTicketList] = useState<TicketInfo[]>([]);
+  // const [ticketList, setTicketList] = useState<TicketInfo[]>([]);
 
   const toggleBuyTicketModal = () => {
     setBuyTicketModalVisible(!isBuyTicketModalVisible);
-    // // if(callPayStatus) {
-    //   toggleMintModal();
-    // // }
+    if(callPayStatus) {
+      toggleMintModal();
+    }
   };
 
   const toggleMintModal = () => {
@@ -111,59 +108,10 @@ export function Tickets({ navigation }: { navigation: BottomTabNavigationProp<an
     setContractAddress(contract);
   };
 
-  const fetchTicketInfos=async()=>{
-
-    var eventInfo = await axios.get(`${storeMeta}/events`);
-
-    // console.log(eventInfo);
-
-    for (let v in eventInfo.data) {
-      // code to be executed
-      console.log(eventInfo.data[v]);
-      
-      const ticketItem: TicketInfo = {
-        ticketype: v +"/" + eventInfo.data[v].tickets[0].ref,
-        name: eventInfo.data[v].name,
-        urlimg: "https://assets-global.website-files.com/60ca686c96b42034829a80d3/60de41c9d82d5b6f6922bb9d_network-poster-00001.jpg",
-        tag: eventInfo.data[v].tag[0],
-        keyword: eventInfo.data[v].keyword[0],
-        description: eventInfo.data[v].description,
-        timepref: eventInfo.data[v].timepref[0].type,
-        ticketprice: "" + eventInfo.data[v].tickets[0].price + ".00",
-        contract: eventInfo.data[v].contract
-      };
-
-      setTicketList([...ticketList,ticketItem])
-
-    }
-
-    // await eventInfo.data.forEach((value) => {
-    //   console.log(value);
-    // });
-
-    // const querySnapshot = await getTicketInfos();
-    // querySnapshot.forEach((doc) => {
-    
-
-    //   const ticketItem: TicketInfo = {
-    //     ticketype: doc.data().ticketype,
-    //     name: doc.data().name,
-    //     urlimg: doc.data().urlimg,
-    //     tag: doc.data().tag,
-    //     keyword: doc.data().keyword,
-    //     description: doc.data().description,
-    //     timepref: "" + doc.data().timepref,
-    //     ticketprice: doc.data().ticketprice,
-    //   };
-
-    //   setTicketList([...ticketList,ticketItem])
-    // });
-
-  }
-
-  useEffect(() => {
-    fetchTicketInfos();
-  }, [])
+  // useEffect(() => {
+  //   fetchTicketInfos();
+  //   console.log(ticketList);
+  // }, [])
 
   return (
     <Box  pt={8}>

@@ -90,7 +90,8 @@ export function Profile({ navigation }: { navigation: BottomTabNavigationProp<an
 
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const { isWalletLinked, isAdmin, userAddress, linkWallet } = useContext(WalletContext);
+  const { isWalletLinked, isAdmin, userAddress, linkWallet, 
+    ticketList, setTicketList, fetchTicketInfos } = useContext(WalletContext);
 
   const [isWalletModalVisible, setWalletModalVisible] = useState(false);
 
@@ -104,6 +105,11 @@ export function Profile({ navigation }: { navigation: BottomTabNavigationProp<an
     console.log("ShowWallet! >> " + userAddress);
 
   };
+
+  useEffect(() => {
+    fetchTicketInfos();
+    console.log(ticketList);
+  }, [])
 
   return (
     <Box  pt={8}>
@@ -173,7 +179,7 @@ export function Profile({ navigation }: { navigation: BottomTabNavigationProp<an
             color={colorMode == 'dark' ? 'white' : 'black'}
           />
           <Text>Version</Text>
-          <Text ml="auto">2.0   </Text>
+          <Text ml="auto">2.02   </Text>
         </HStack>
         {/* <Divider opacity={colorMode == 'dark' ? '0.4' : '1'} /> */}
 
